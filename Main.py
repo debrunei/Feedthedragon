@@ -3,7 +3,7 @@ pygame.init()
 
 Window_Width = 1000
 Window_Height = 400
-Display_surface = pygame.display.set_mode((Window_Width, Window_Height))
+display_surface = pygame.display.set_mode((Window_Width, Window_Height))
 pygame.display.set_caption("Feed the dragon")
 
 
@@ -54,9 +54,11 @@ background: WHITE
 rect location: centerx = WINDOW_WIDTH//2
 rect location: y = 10 
 '''
-title_text = font.render("Feed the dragon", True, GREEN, DARKGREEN)
+title_text = font.render("Feed the dragon", True, GREEN, WHITE)
 title_rect = title_text.get_rect()
-title_rect: centerx = Window_Width//2
+title_rect.centerx = Window_Width//2
+title_rect.y = 10
+
 
 #Set Text for Lives (Similar to Score)
 '''
@@ -67,6 +69,9 @@ color: GREEN
 background: DARKGREEN
 rect location: y = 10  
 '''
+lives_text = font.render("Lives: " + str(player_lives), True, GREEN, DARKGREEN)
+lives_rect = lives_text.get_rect()
+lives_rect.topright = (Window_Width - 10, 10)
 
 
 
@@ -79,9 +84,9 @@ color: GREEN
 background: DARKGREEN
 rect location: center = (WINDOW_WIDTH//2, WINDOW_HEIGHT//2) 
 '''
-
-
-
+game_over_text = font.render("GAMEOVER", True, GREEN, DARKGREEN)
+game_over_rect = game_over_text.get_rect()
+game_over_rect.center = (Window_Width//2, Window_Height//2)
 
 #Set Text for Continue (Similar to Score)
 '''
@@ -92,24 +97,53 @@ color: GREEN
 background: DARKGREEN
 rect location: center = (WINDOW_WIDTH//2, WINDOW_HEIGHT//2 + 32)
 '''
+continue_text = font.render("Press any key to continue", True, GREEN, DARKGREEN)
+continue_rect = continue_text.get_rect()
+continue_rect.center = (Window_Width//2, Window_Height//2 + 32)
+
+
+coin_sound = pygame.mixer.Sound("coin_sound.wav")
+miss_sound = pygame.mixer.Sound("miss_sound.wav")
+miss_sound.set_volume(0.1)
+pygame.mixer.music.load("ftd_background_music.wav")
+
+
+player_image = pygame.image.load("dragon_right.png")
+player_rect = player_image.get_rect()
+player_rect.left = 32
+player_rect.centery = Window_Height // 2
+
+coin_image = pygame.image.load("coin.png")
+coin_rect = coin_image.get_rect()
+coin_rect.x = Window_Width + BUFFER_DISTANCE
+coin_rect.y = 0
+
+pygame.mixer.music.play(-1, 0.0)
 
 
 
 
 
+
+# The main game loop
 running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-    Display_surface.fill(BLACK)
+    #Fill the display
+    display_surface.fill(BLACK)
 
-    Display_surface.blit(score_text, score_rect)
+    display_surface.blit(score_text, score_rect)
+    display_surface.blit(title_text, title_rect)
+    display_surface.blit(lives_text, lives_rect)
+    display_surface.blit(player_image, player_rect)
+    display_surface.blit(coin_image, coin_rect)
 
+
+    #Update display and tick the clock
     pygame.display.update()
     clock.tick(FPS)
-
-
 
 pygame.quit()
