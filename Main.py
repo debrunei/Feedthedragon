@@ -138,6 +138,7 @@ while running:
         coin_rect.x  = Window_Width + BUFFER_DISTANCE
         coin_rect.y = random.randint(64, Window_Height - 32)
 
+
     score_text = font.render("Score: " + str(score), True, GREEN, DARKGREEN)
     lives_text = font.render("lives: " + str(player_lives), True, GREEN, DARKGREEN)
 
